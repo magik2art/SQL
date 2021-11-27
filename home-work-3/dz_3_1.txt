@@ -179,9 +179,9 @@ CREATE TABLE apps_description (
     
     
     FOREIGN KEY apps_category(apps_category) REFERENCES goods_categories(category_id),
-    FOREIGN KEY (company_posted_id) REFERENCES users(id)
+    FOREIGN KEY posted(company_posted_id) REFERENCES users(id)
     
-) COMMENT = 'Таблица с описанием товара';
+) COMMENT = 'Таблица с описанием компании';
 
 DROP TABLE IF EXISTS company;
 CREATE TABLE company (
