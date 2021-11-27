@@ -17,8 +17,7 @@ create table users (
 	password_hash varchar(100), -- 123457 -> ojrgnboroomom
 	phone bigint unsigned unique,
 	
-	index users_firstname_lastname_idx (firestname, lastname)
-	
+	index users_firstname_lastname_idx (firstname, lastname)
 );
 
 
@@ -41,7 +40,7 @@ on delete restrict;
 drop table if exists messages;
 
 create table messages(
-	id SERIAL, --SERIAL = BIGINT UNSIGNED NOT NULL auto_increment unique
+	id SERIAL, -- SERIAL = BIGINT UNSIGNED NOT NULL auto_increment unique
 	from_user_id BIGINT UNSIGNED NOT NULL,
 	to_user_id BIGINT UNSIGNED NOT NULL,
 	body TEXT,
@@ -114,7 +113,7 @@ create table media(
 	id serial,
 	media_type_id BIGINT UNSIGNED NOT NULL,
 	user_id BIGINT UNSIGNED NOT NULL,
-	body texxt,
+	body text,
 	filename varchar(255),
 	'size' int,
 	metadata json,
@@ -158,4 +157,38 @@ create table photos(
 	foreign key (media_id) references media(id)
 );
 	
-	
+
+drop table if exists apps_category;
+
+create table apps_category(
+	category_id SERIAL PRIMARY KEY, -- Уникальный ID категории
+	category_name VARCHAR(255) UNIQUE, -- Название категории приложений
+    
+) COMMENT = 'Таблица категорий приложений';
+
+DROP TABLE IF EXISTS apps_description;
+CREATE TABLE apps_description (
+	apps_id SERIAL PRIMARY KEY, -- Уникальный ID приложения
+	apps_name VARCHAR(255), -- Название приложения
+	apps_photo VARCHAR(255) DEFAULT NULL, -- Изображение приложения
+	apps_description TEXT, -- Описание приложения
+	apps_category BIGINT UNSIGNED NOT NULL, -- Категория приложения
+	company_posted_id BIGINT UNSIGNED NOT NULL, -- Компания разработавшая приложение
+	apps_url VARCHAR(255), -- ссылка на приложение
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Дата последнего обновления
+    
+    
+    FOREIGN KEY apps_category(apps_category) REFERENCES goods_categories(category_id),
+    FOREIGN KEY (company_posted_id) REFERENCES users(id)
+    
+) COMMENT = 'Таблица с описанием товара';
+
+DROP TABLE IF EXISTS company;
+CREATE TABLE company (
+	company_id SERIAL PRIMARY KEY, -- Уникальный ID компании
+	company_name VARCHAR(255), -- Наименование компании
+	company_description TEXT, -- Описание компании
+    company_updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Дата последнего обновления
+    
+    
+) COMMENT = 'Таблица с перечнем компаний';
